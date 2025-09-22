@@ -81,18 +81,20 @@ export default function Dashboard() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Quick Search */}
         <div className="mb-8">
-          <div className="relative max-w-2xl">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
-            <Input
-              placeholder="Search municipal documents, meetings, and trends..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 pr-4 py-3 text-lg"
-            />
-            <Button className="absolute right-2 top-1/2 transform -translate-y-1/2">
-              Search
-            </Button>
-          </div>
+            <div className="relative max-w-2xl">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+              <Input
+                placeholder="Search municipal documents, meetings, and trends..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10 pr-4 py-3 text-lg"
+              />
+              <Link href="/search">
+                <Button className="absolute right-2 top-1/2 transform -translate-y-1/2">
+                  Search
+                </Button>
+              </Link>
+            </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -111,36 +113,38 @@ export default function Dashboard() {
               </CardHeader>
               <CardContent className="space-y-4">
                 {mockDocuments.map((doc) => (
-                  <div key={doc.id} className="border rounded-lg p-4 hover:bg-muted/50 transition-colors">
-                    <div className="flex justify-between items-start mb-2">
-                      <h3 className="font-medium">{doc.title}</h3>
-                      <Badge variant="outline">{doc.type}</Badge>
+                  <Link key={doc.id} href={`/document/${doc.id}`}>
+                    <div className="border rounded-lg p-4 hover:bg-muted/50 transition-colors cursor-pointer">
+                      <div className="flex justify-between items-start mb-2">
+                        <h3 className="font-medium hover:text-blue-600">{doc.title}</h3>
+                        <Badge variant="outline">{doc.type}</Badge>
+                      </div>
+                      <div className="flex items-center gap-4 text-sm text-muted-foreground mb-2">
+                        <span className="flex items-center gap-1">
+                          <MapPin className="w-3 h-3" />
+                          {mockCounties.find(c => c.id === doc.countyId)?.name} County
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <Clock className="w-3 h-3" />
+                          {new Date(doc.date).toLocaleDateString()}
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <FileText className="w-3 h-3" />
+                          OCR Quality: {doc.ocrQuality}%
+                        </span>
+                      </div>
+                      <p className="text-sm text-muted-foreground mb-3">
+                        {doc.extractedText.substring(0, 200)}...
+                      </p>
+                      <div className="flex flex-wrap gap-1">
+                        {doc.keywords.slice(0, 4).map((keyword, index) => (
+                          <Badge key={index} variant="secondary" className="text-xs">
+                            {keyword}
+                          </Badge>
+                        ))}
+                      </div>
                     </div>
-                    <div className="flex items-center gap-4 text-sm text-muted-foreground mb-2">
-                      <span className="flex items-center gap-1">
-                        <MapPin className="w-3 h-3" />
-                        {mockCounties.find(c => c.id === doc.countyId)?.name} County
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <Clock className="w-3 h-3" />
-                        {new Date(doc.date).toLocaleDateString()}
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <FileText className="w-3 h-3" />
-                        OCR Quality: {doc.ocrQuality}%
-                      </span>
-                    </div>
-                    <p className="text-sm text-muted-foreground mb-3">
-                      {doc.extractedText.substring(0, 200)}...
-                    </p>
-                    <div className="flex flex-wrap gap-1">
-                      {doc.keywords.slice(0, 4).map((keyword, index) => (
-                        <Badge key={index} variant="secondary" className="text-xs">
-                          {keyword}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
+                  </Link>
                 ))}
               </CardContent>
             </Card>
@@ -243,18 +247,22 @@ export default function Dashboard() {
                 <CardTitle>Quick Actions</CardTitle>
               </CardHeader>
               <CardContent className="space-y-2">
-                <Button variant="outline" className="w-full justify-start" size="sm">
-                  <Filter className="w-4 h-4 mr-2" />
-                  Advanced Search
-                </Button>
+                <Link href="/search">
+                  <Button variant="outline" className="w-full justify-start" size="sm">
+                    <Filter className="w-4 h-4 mr-2" />
+                    Advanced Search
+                  </Button>
+                </Link>
                 <Button variant="outline" className="w-full justify-start" size="sm">
                   <Bell className="w-4 h-4 mr-2" />
                   Manage Alerts
                 </Button>
-                <Button variant="outline" className="w-full justify-start" size="sm">
-                  <TrendingUp className="w-4 h-4 mr-2" />
-                  View Heatmap
-                </Button>
+                <Link href="/trends">
+                  <Button variant="outline" className="w-full justify-start" size="sm">
+                    <TrendingUp className="w-4 h-4 mr-2" />
+                    View Heatmap
+                  </Button>
+                </Link>
               </CardContent>
             </Card>
           </div>
