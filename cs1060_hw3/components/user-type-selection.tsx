@@ -78,7 +78,7 @@ export function UserTypeSelection() {
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold mb-4">Choose Your User Type</h2>
         <p className="text-lg text-muted-foreground">
-          Get a customized experience based on how you'll use CivicPulse
+          Get a customized experience based on how you&apos;ll use CivicPulse
         </p>
       </div>
       
