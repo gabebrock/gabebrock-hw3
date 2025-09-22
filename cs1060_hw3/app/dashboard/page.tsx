@@ -117,7 +117,15 @@ export default function Dashboard() {
                     <div className="border rounded-lg p-4 hover:bg-muted/50 transition-colors cursor-pointer">
                       <div className="flex justify-between items-start mb-2">
                         <h3 className="font-medium hover:text-blue-600">{doc.title}</h3>
-                        <Badge variant="outline">{doc.type}</Badge>
+                        <div className="flex items-center gap-2">
+                          <Badge variant="outline">{doc.type}</Badge>
+                          {/* High-Confidence Match Indicator */}
+                          {doc.keywords.length >= 3 && (
+                            <Badge className="bg-red-100 text-red-800 border-red-200">
+                              High-Confidence Match
+                            </Badge>
+                          )}
+                        </div>
                       </div>
                       <div className="flex items-center gap-4 text-sm text-muted-foreground mb-2">
                         <span className="flex items-center gap-1">
@@ -131,6 +139,11 @@ export default function Dashboard() {
                         <span className="flex items-center gap-1">
                           <FileText className="w-3 h-3" />
                           OCR Quality: {doc.ocrQuality}%
+                        </span>
+                        {/* Keyword Match Count */}
+                        <span className="flex items-center gap-1 text-blue-600">
+                          <span className="w-2 h-2 bg-blue-600 rounded-full" />
+                          {doc.keywords.length} keyword matches
                         </span>
                       </div>
                       <p className="text-sm text-muted-foreground mb-3">

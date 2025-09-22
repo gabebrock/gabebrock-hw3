@@ -300,6 +300,21 @@ export default function DocumentViewer({ params }: DocumentViewerProps) {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-3">
+                {/* Historical Context Alert */}
+                <div className="p-3 bg-blue-50 dark:bg-blue-950 border border-blue-200 rounded-lg">
+                  <div className="flex items-start gap-2">
+                    <div className="w-2 h-2 bg-blue-500 rounded-full mt-2" />
+                    <div>
+                      <h4 className="text-sm font-medium text-blue-800 dark:text-blue-200">
+                        Historical Context Found
+                      </h4>
+                      <p className="text-xs text-blue-600 dark:text-blue-300 mt-1">
+                        Sedgwick County debated this one year ago; Ordinance passed in Sedgwick County in 2022
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                
                 {relatedDocuments.map((relatedDoc) => (
                   <div key={relatedDoc.id} className="p-3 border rounded-lg hover:bg-muted/50 cursor-pointer">
                     <h4 className="text-sm font-medium mb-1">{relatedDoc.title}</h4>
@@ -312,6 +327,13 @@ export default function DocumentViewer({ params }: DocumentViewerProps) {
                         <Calendar className="w-3 h-3" />
                         {new Date(relatedDoc.date).toLocaleDateString()}
                       </div>
+                      {/* Show if this is a historical precedent */}
+                      {relatedDoc.countyId === '2' && (
+                        <div className="flex items-center gap-1 text-blue-600">
+                          <span className="w-2 h-2 bg-blue-500 rounded-full" />
+                          <span className="text-xs">Historical precedent - Ordinance passed 2022</span>
+                        </div>
+                      )}
                     </div>
                   </div>
                 ))}
