@@ -13,7 +13,6 @@ import {
   FileText,
   MapPin,
   Calendar,
-  Clock,
   Search,
   Highlighter,
   ZoomIn,
@@ -29,7 +28,6 @@ interface DocumentViewerProps {
 export default function DocumentViewer({ params }: DocumentViewerProps) {
   const [viewMode, setViewMode] = useState<'split' | 'pdf' | 'text'>('split');
   const [highlightKeywords, setHighlightKeywords] = useState(true);
-  const [searchTerm, setSearchTerm] = useState("");
   
   // Mock document - in a real app this would be fetched based on the ID
   const document = mockDocuments.find(doc => doc.id === params.id) || mockDocuments[0];
