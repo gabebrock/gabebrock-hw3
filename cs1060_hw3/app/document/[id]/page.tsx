@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -22,15 +22,26 @@ import { mockCounties, mockDocuments } from "@/lib/mock-data";
 import Link from "next/link";
 
 interface DocumentViewerProps {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export default function DocumentViewer({ params }: DocumentViewerProps) {
   const [viewMode, setViewMode] = useState<'split' | 'pdf' | 'text'>('split');
   const [highlightKeywords, setHighlightKeywords] = useState(true);
+  const [id, setId] = useState<string>('');
+
+  // Extract id from params Promise
+  useEffect(() => {
+    params.then(({ id: paramId }) => setId(paramId));
+  }, [params]);
+
+  // Show loading state while id is being resolved
+  if (!id) {
+    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+  }
   
   // Mock document - in a real app this would be fetched based on the ID
-  const document = mockDocuments.find(doc => doc.id === params.id) || mockDocuments[0];
+  const document = mockDocuments.find(doc => doc.id === id) || mockDocuments[0];
   const county = mockCounties.find(c => c.id === document.countyId);
 
   // Mock related documents
