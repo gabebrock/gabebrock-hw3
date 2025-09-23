@@ -103,8 +103,93 @@ export const mockMeetings: Meeting[] = [
 // Mock Documents with realistic municipal content
 // Extended Mock Documents (Education Focus)
 export const mockDocuments: Document[] = [
-  // --- Existing docs (1-3) omitted here for brevity ---
+  {
+    id: '1',
+    meetingId: '1',
+    countyId: '1',
+    title: 'Cell Phone Policy Discussion - Johnson County Schools',
+    type: 'agenda',
+    date: '2024-09-25T19:00:00Z',
+    content: 'Agenda Item 4.2: Discussion of proposed cell phone restrictions during school hours...',
+    extractedText: `JOHNSON COUNTY SCHOOL BOARD
 
+AGENDA ITEM 4.2: Cell Phone Policy Revision
+
+The administration recommends implementing a district-wide cell phone restriction policy during instructional hours. This policy would require students to store cell phones in designated pouches or lockers during class time.
+
+Key considerations:
+- Student safety and emergency communication
+- Impact on learning environment
+- Enforcement mechanisms
+- Parent communication protocols
+- Implementation timeline: January 2025
+
+Similar policies have been adopted in neighboring districts with positive results in student engagement and academic performance.`,
+    topics: ['education', 'technology', 'student_policy'],
+    keywords: ['cell phone', 'ban', 'restriction', 'student policy', 'education'],
+    processingStatus: 'completed',
+    ocrQuality: 95
+  },
+  {
+    id: '2',
+    meetingId: '2',
+    countyId: '2',
+    title: 'Renewable Energy Zoning Amendment',
+    type: 'resolution',
+    date: '2024-09-23T09:00:00Z',
+    content: 'Resolution 2024-089: Amending zoning regulations for solar energy installations...',
+    extractedText: `SEDGWICK COUNTY COMMISSION
+
+RESOLUTION 2024-089: Solar Energy Zoning Amendment
+
+WHEREAS, the County recognizes the importance of renewable energy development;
+WHEREAS, current zoning regulations do not adequately address utility-scale solar installations;
+
+NOW THEREFORE, BE IT RESOLVED that the Sedgwick County Zoning Regulations are hereby amended to:
+
+1. Create a new Solar Energy Overlay District
+2. Establish setback requirements of 100 feet from residential properties
+3. Require decommissioning bonds for utility-scale projects
+4. Mandate native vegetation screening along property boundaries
+
+The amendment addresses concerns raised by rural residents while promoting clean energy development. Staff estimates this could facilitate up to 500 MW of new solar capacity over the next five years.`,
+    topics: ['renewable_energy', 'zoning', 'solar', 'development'],
+    keywords: ['solar', 'renewable energy', 'zoning', 'utility scale', 'setbacks'],
+    processingStatus: 'completed',
+    ocrQuality: 92
+  },
+  {
+    id: '3',
+    meetingId: '3',
+    countyId: '1',
+    title: 'Transit Development District Proposal',
+    type: 'minutes',
+    date: '2024-09-20T19:30:00Z',
+    content: 'Discussion of proposed Bus Rapid Transit corridor along Metcalf Avenue...',
+    extractedText: `OVERLAND PARK CITY COUNCIL MINUTES
+
+ITEM 7: Transit Development District - Metcalf Avenue BRT
+
+Council Member Johnson presented the staff report on the proposed Transit Development District (TDD) for the Metcalf Avenue Bus Rapid Transit corridor.
+
+Key points discussed:
+- 12-mile corridor from downtown Kansas City to College Boulevard
+- Estimated cost: $180 million
+- Federal funding commitment: $90 million (50%)
+- Local match requirement: $90 million over 10 years
+- Projected ridership: 8,500 daily passengers by 2030
+
+Public comments:
+- Business owners expressed concerns about construction impacts
+- Transit advocates emphasized regional connectivity benefits
+- Residents questioned property tax implications
+
+Motion by Council Member Smith, seconded by Council Member Davis, to approve the TDD formation and authorize staff to begin federal grant applications. Motion passed 6-2.`,
+    topics: ['transit', 'development', 'funding', 'infrastructure'],
+    keywords: ['bus rapid transit', 'BRT', 'transit', 'federal funding', 'development district'],
+    processingStatus: 'completed',
+    ocrQuality: 88
+  },
   {
     id: '4',
     meetingId: '1',

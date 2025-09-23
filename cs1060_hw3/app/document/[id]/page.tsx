@@ -20,6 +20,7 @@ import {
   TrendingUp
 } from "lucide-react";
 import { mockCounties, mockDocuments } from "@/lib/mock-data";
+import { ExportDialog } from "@/components/export-dialog";
 import Link from "next/link";
 
 interface DocumentViewerProps {
