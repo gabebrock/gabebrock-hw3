@@ -15,8 +15,6 @@ import {
   Calendar,
   Search,
   Highlighter,
-  ZoomIn,
-  ZoomOut,
   TrendingUp
 } from "lucide-react";
 import { mockCounties, mockDocuments } from "@/lib/mock-data";
@@ -262,12 +260,6 @@ export default function DocumentViewer({ params }: DocumentViewerProps) {
               >
                 <Highlighter className="w-4 h-4 mr-2" />
                 Highlight Keywords
-              </Button>
-              <Button variant="outline" size="sm">
-                <ZoomOut className="w-4 h-4" />
-              </Button>
-              <Button variant="outline" size="sm">
-                <ZoomIn className="w-4 h-4" />
               </Button>
             </div>
           </div>
