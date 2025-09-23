@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -18,14 +18,94 @@ import {
   Filter
 } from "lucide-react";
 import { mockCounties, mockDocuments, mockTrends, mockMeetings } from "@/lib/mock-data";
+import { Navigation } from "@/components/navigation";
 import Link from "next/link";
 
 export default function Dashboard() {
   const [searchQuery, setSearchQuery] = useState("");
+  const [filteredDocuments, setFilteredDocuments] = useState(mockDocuments);
+  const [user, setUser] = useState<{
+    id?: string;
+    name: string;
+    email?: string;
+    type: string;
+    preferences?: {
+      topics?: string[];
+      states?: string[];
+      keywords?: string[];
+    };
+    loginTime?: string;
+  } | null>(null);
 
-  // Mock user data - in a real app this would come from authentication
-  const userType = "reporter"; // reporter, strategist, advocate, developer
-  const userName = "John Reporter";
+  // Load user data from localStorage (simulating authentication)
+  useEffect(() => {
+    try {
+      const userData = localStorage.getItem('civicpulse_user');
+      if (userData) {
+        setUser(JSON.parse(userData));
+      } else {
+      // Create default John Reporter user if none exists
+      const defaultUser = {
+        id: 'john_reporter_001',
+        name: 'John Reporter',
+        email: 'john@newsroom.com',
+        type: 'reporter',
+        preferences: {
+          topics: ['Education', 'Public Schools'],
+          states: ['Kansas', 'Missouri'],
+          keywords: ['cell phone ban', 'curriculum', 'book policy']
+        },
+        loginTime: new Date().toISOString(),
+        savedItems: [] // Initialize empty saved items
+      };
+      
+        // Save to localStorage and set state
+        localStorage.setItem('civicpulse_user', JSON.stringify(defaultUser));
+        setUser(defaultUser);
+      }
+    } catch (error) {
+      console.error('Error loading user data:', error);
+      // Fallback to default user if localStorage fails
+      setUser({
+        name: 'John Reporter',
+        type: 'reporter',
+        preferences: { keywords: [] }
+      });
+    }
+  }, []);
+
+  // Filter documents based on search query
+  useEffect(() => {
+    if (!searchQuery.trim()) {
+      setFilteredDocuments(mockDocuments);
+    } else {
+      const filtered = mockDocuments.filter(doc => {
+        const query = searchQuery.toLowerCase();
+        return (
+          doc.title.toLowerCase().includes(query) ||
+          doc.content.toLowerCase().includes(query) ||
+          doc.extractedText.toLowerCase().includes(query) ||
+          doc.keywords.some(keyword => keyword.toLowerCase().includes(query)) ||
+          doc.topics.some(topic => topic.toLowerCase().includes(query)) ||
+          mockCounties.find(c => c.id === doc.countyId)?.name.toLowerCase().includes(query)
+        );
+      });
+      setFilteredDocuments(filtered);
+    }
+  }, [searchQuery]);
+
+  // Function to highlight search terms in text
+  const highlightSearchTerms = (text: string, query: string) => {
+    if (!query.trim()) return text;
+    
+    const words = query.toLowerCase().split(/\s+/).filter(word => word.length > 0);
+    let highlightedText = text;
+    words.forEach(word => {
+      const regex = new RegExp(`(${word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+      highlightedText = highlightedText.replace(regex, '<mark class="bg-yellow-200 dark:bg-yellow-800">$1</mark>');
+    });
+    return highlightedText;
+  };
 
   const recentAlerts = [
     {
@@ -55,28 +135,7 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b border-border">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center gap-4">
-              <Link href="/" className="flex items-center gap-2">
-                <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-                  <span className="text-white text-sm font-bold">CP</span>
-                </div>
-                <span className="font-semibold">CivicPulse</span>
-              </Link>
-              <Badge variant="secondary">{userType}</Badge>
-            </div>
-            <div className="flex items-center gap-4">
-              <Button variant="ghost" size="sm">
-                <Bell className="w-4 h-4" />
-              </Button>
-              <div className="text-sm">Welcome, {userName}</div>
-            </div>
-          </div>
-        </div>
-      </header>
+      <Navigation />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Quick Search */}
@@ -106,21 +165,40 @@ export default function Dashboard() {
                 <CardTitle className="flex items-center gap-2">
                   <Eye className="w-5 h-5" />
                   Watchlist Feed
+                  {searchQuery && (
+                    <Badge variant="secondary" className="ml-2">
+                      {filteredDocuments.length} results
+                    </Badge>
+                  )}
                 </CardTitle>
                 <CardDescription>
-                  Recent items matching your keywords and interests
+                  {searchQuery 
+                    ? `Showing ${Math.min(5, filteredDocuments.length)} of ${filteredDocuments.length} results for "${searchQuery}"`
+                    : "Recent items matching your keywords and interests"
+                  }
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                {mockDocuments.map((doc) => (
+                {filteredDocuments.slice(0, 5).map((doc) => (
                   <Link key={doc.id} href={`/document/${doc.id}`}>
                     <div className="border rounded-lg p-4 hover:bg-muted/50 transition-colors cursor-pointer">
                       <div className="flex justify-between items-start mb-2">
-                        <h3 className="font-medium hover:text-blue-600">{doc.title}</h3>
+                        <h3 
+                          className="font-medium hover:text-blue-600"
+                          dangerouslySetInnerHTML={{
+                            __html: highlightSearchTerms(doc.title, searchQuery)
+                          }}
+                        />
                         <div className="flex items-center gap-2">
                         <Badge variant="outline">{doc.type}</Badge>
-                          {/* High-Confidence Match Indicator */}
-                          {doc.keywords.length >= 3 && (
+                          {/* High-Confidence Match Indicator - only show if topics match user preferences */}
+                          {doc.keywords.length >= 3 && 
+                           user?.preferences?.topics?.some(userTopic => 
+                             doc.topics.some(docTopic => 
+                               userTopic.toLowerCase().includes(docTopic.toLowerCase()) ||
+                               docTopic.toLowerCase().includes(userTopic.toLowerCase())
+                             )
+                           ) && (
                             <Badge className="bg-red-100 text-red-800 border-red-200">
                               High-Confidence Match
                             </Badge>
@@ -141,9 +219,12 @@ export default function Dashboard() {
                           OCR Quality: {doc.ocrQuality}%
                         </span>
                       </div>
-                      <p className="text-sm text-muted-foreground mb-3">
-                        {doc.extractedText.substring(0, 200)}...
-                      </p>
+                      <p 
+                        className="text-sm text-muted-foreground mb-3"
+                        dangerouslySetInnerHTML={{
+                          __html: highlightSearchTerms(doc.extractedText.substring(0, 200), searchQuery) + '...'
+                        }}
+                      />
                       <div className="flex flex-wrap gap-1">
                         {doc.keywords.slice(0, 4).map((keyword, index) => (
                           <Badge key={index} variant="secondary" className="text-xs">
@@ -154,6 +235,16 @@ export default function Dashboard() {
                     </div>
                   </Link>
                 ))}
+                
+                {filteredDocuments.length === 0 && searchQuery && (
+                  <div className="text-center py-8">
+                    <Search className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+                    <h3 className="text-lg font-medium mb-2">No results found</h3>
+                    <p className="text-muted-foreground">
+                      No documents match your search for &quot;{searchQuery}&quot;
+                    </p>
+                  </div>
+                )}
               </CardContent>
             </Card>
 

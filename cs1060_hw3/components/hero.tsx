@@ -1,4 +1,5 @@
 import { TrendingUp, MapPin, Bell, Search } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 export function Hero() {
   return (
@@ -14,6 +15,11 @@ export function Hero() {
         </div>
       </div>
       <div className="text-center max-w-4xl">
+        <div className="flex justify-center mb-4">
+          <Badge variant="secondary" className="text-xs">
+            Interactive Demo
+          </Badge>
+        </div>
         <h2 className="text-4xl lg:text-6xl font-bold !leading-tight mb-6">
           Find local trends before they{" "}
           <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">

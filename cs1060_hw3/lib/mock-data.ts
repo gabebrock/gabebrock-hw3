@@ -111,19 +111,7 @@ export const mockDocuments: Document[] = [
     date: '2024-09-25T19:00:00Z',
     content: 'Agenda Item 4.2: Discussion of proposed cell phone restrictions during school hours...',
     extractedText: `JOHNSON COUNTY SCHOOL BOARD
-    
-AGENDA ITEM 4.2: Cell Phone Policy Revision
-
-The administration recommends implementing a district-wide cell phone restriction policy during instructional hours. This policy would require students to store cell phones in designated pouches or lockers during class time.
-
-Key considerations:
-- Student safety and emergency communication
-- Impact on learning environment
-- Enforcement mechanisms
-- Parent communication protocols
-- Implementation timeline: January 2025
-
-Similar policies have been adopted in neighboring districts with positive results in student engagement and academic performance.`,
+AGENDA ITEM 4.2: Cell Phone Policy Revision ...`,
     topics: ['education', 'technology', 'student_policy'],
     keywords: ['cell phone', 'ban', 'restriction', 'student policy', 'education'],
     processingStatus: 'completed',
@@ -131,63 +119,214 @@ Similar policies have been adopted in neighboring districts with positive result
   },
   {
     id: '2',
+    meetingId: '1',
+    countyId: '1',
+    title: 'After-School Tutoring Expansion',
+    type: 'minutes',
+    date: '2024-09-25T19:00:00Z',
+    content: 'Board discussion of expanding after-school tutoring programs...',
+    extractedText: `MINUTES: Johnson County School Board ...`,
+    topics: ['education', 'academic_support'],
+    keywords: ['tutoring', 'after school', 'ESSER funds', 'test scores'],
+    processingStatus: 'completed',
+    ocrQuality: 90
+  },
+  {
+    id: '3',
+    meetingId: '2',
+    countyId: '2',
+    title: 'Teacher Retention Incentives',
+    type: 'resolution',
+    date: '2024-09-23T09:00:00Z',
+    content: 'Resolution 2024-090: Establishing county-level incentives for teacher recruitment and retention...',
+    extractedText: `SEDGWICK COUNTY COMMISSION
+RESOLUTION 2024-090: Teacher Retention Incentives ...`,
+    topics: ['education', 'workforce', 'teacher_recruitment'],
+    keywords: ['teacher retention', 'housing stipend', 'incentives'],
+    processingStatus: 'completed',
+    ocrQuality: 93
+  },
+  {
+    id: '4',
+    meetingId: '3',
+    countyId: '1',
+    title: 'STEM Curriculum Enhancement Proposal',
+    type: 'agenda',
+    date: '2024-09-20T19:30:00Z',
+    content: 'Agenda Item: Proposal to adopt new STEM-focused curriculum modules...',
+    extractedText: `OVERLAND PARK CITY COUNCIL ...`,
+    topics: ['education', 'STEM', 'curriculum'],
+    keywords: ['STEM', 'robotics', 'curriculum', 'coding'],
+    processingStatus: 'completed',
+    ocrQuality: 92
+  },
+  {
+    id: '5',
+    meetingId: '1',
+    countyId: '1',
+    title: 'Student Mental Health Services Report',
+    type: 'minutes',
+    date: '2024-09-25T19:00:00Z',
+    content: 'Report presented on district mental health initiatives...',
+    extractedText: `MINUTES: Johnson County School Board ...`,
+    topics: ['education', 'mental_health'],
+    keywords: ['mental health', 'counseling', 'telehealth'],
+    processingStatus: 'completed',
+    ocrQuality: 95
+  },
+
+  // --- Environment & Infrastructure ---
+  {
+    id: '6',
     meetingId: '2',
     countyId: '2',
     title: 'Renewable Energy Zoning Amendment',
     type: 'resolution',
     date: '2024-09-23T09:00:00Z',
     content: 'Resolution 2024-089: Amending zoning regulations for solar energy installations...',
-    extractedText: `SEDGWICK COUNTY COMMISSION
-    
-RESOLUTION 2024-089: Solar Energy Zoning Amendment
-
-WHEREAS, the County recognizes the importance of renewable energy development;
-WHEREAS, current zoning regulations do not adequately address utility-scale solar installations;
-
-NOW THEREFORE, BE IT RESOLVED that the Sedgwick County Zoning Regulations are hereby amended to:
-
-1. Create a new Solar Energy Overlay District
-2. Establish setback requirements of 100 feet from residential properties
-3. Require decommissioning bonds for utility-scale projects
-4. Mandate native vegetation screening along property boundaries
-
-The amendment addresses concerns raised by rural residents while promoting clean energy development. Staff estimates this could facilitate up to 500 MW of new solar capacity over the next five years.`,
-    topics: ['renewable_energy', 'zoning', 'solar', 'development'],
-    keywords: ['solar', 'renewable energy', 'zoning', 'utility scale', 'setbacks'],
+    extractedText: `SEDGWICK COUNTY COMMISSION ...`,
+    topics: ['renewable_energy', 'zoning', 'solar'],
+    keywords: ['solar', 'renewable energy', 'zoning'],
     processingStatus: 'completed',
     ocrQuality: 92
   },
   {
-    id: '3',
+    id: '7',
     meetingId: '3',
     countyId: '1',
     title: 'Transit Development District Proposal',
     type: 'minutes',
     date: '2024-09-20T19:30:00Z',
     content: 'Discussion of proposed Bus Rapid Transit corridor along Metcalf Avenue...',
-    extractedText: `OVERLAND PARK CITY COUNCIL MINUTES
-    
-ITEM 7: Transit Development District - Metcalf Avenue BRT
-
-Council Member Johnson presented the staff report on the proposed Transit Development District (TDD) for the Metcalf Avenue Bus Rapid Transit corridor.
-
-Key points discussed:
-- 12-mile corridor from downtown Kansas City to College Boulevard
-- Estimated cost: $180 million
-- Federal funding commitment: $90 million (50%)
-- Local match requirement: $90 million over 10 years
-- Projected ridership: 8,500 daily passengers by 2030
-
-Public comments:
-- Business owners expressed concerns about construction impacts
-- Transit advocates emphasized regional connectivity benefits
-- Residents questioned property tax implications
-
-Motion by Council Member Smith, seconded by Council Member Davis, to approve the TDD formation and authorize staff to begin federal grant applications. Motion passed 6-2.`,
-    topics: ['transit', 'development', 'funding', 'infrastructure'],
-    keywords: ['bus rapid transit', 'BRT', 'transit', 'federal funding', 'development district'],
+    extractedText: `OVERLAND PARK CITY COUNCIL MINUTES ...`,
+    topics: ['transit', 'development', 'infrastructure'],
+    keywords: ['bus rapid transit', 'transit', 'development district'],
     processingStatus: 'completed',
     ocrQuality: 88
+  },
+  {
+    id: '8',
+    meetingId: '2',
+    countyId: '2',
+    title: 'School Bus Fleet Electrification',
+    type: 'agenda',
+    date: '2024-09-23T09:00:00Z',
+    content: 'Proposal to purchase 10 electric school buses with federal grant support...',
+    extractedText: `SEDGWICK COUNTY COMMISSION ...`,
+    topics: ['education', 'transportation', 'sustainability'],
+    keywords: ['electric buses', 'school transportation'],
+    processingStatus: 'completed',
+    ocrQuality: 91
+  },
+  {
+    id: '9',
+    meetingId: '2',
+    countyId: '2',
+    title: 'County Road Repair Bond Issue',
+    type: 'ordinance',
+    date: '2024-09-23T09:00:00Z',
+    content: 'Bond proposal for $25M to repair and repave county roads...',
+    extractedText: `SEDGWICK COUNTY COMMISSION
+ORDINANCE 2024-11: Road Repair Bond ...`,
+    topics: ['infrastructure', 'transportation', 'funding'],
+    keywords: ['road repair', 'bond', 'infrastructure'],
+    processingStatus: 'completed',
+    ocrQuality: 89
+  },
+
+  // --- Housing & Development ---
+  {
+    id: '10',
+    meetingId: '3',
+    countyId: '1',
+    title: 'Affordable Housing Incentive Program',
+    type: 'resolution',
+    date: '2024-09-20T19:30:00Z',
+    content: 'Resolution to expand property tax abatements for affordable housing developments...',
+    extractedText: `OVERLAND PARK CITY COUNCIL
+RESOLUTION 2024-15: Affordable Housing Incentives ...`,
+    topics: ['housing', 'development'],
+    keywords: ['affordable housing', 'incentives', 'property tax'],
+    processingStatus: 'completed',
+    ocrQuality: 90
+  },
+  {
+    id: '11',
+    meetingId: '2',
+    countyId: '2',
+    title: 'Downtown Redevelopment Master Plan',
+    type: 'agenda',
+    date: '2024-09-23T09:00:00Z',
+    content: 'Presentation of proposed redevelopment plan for downtown Wichita...',
+    extractedText: `SEDGWICK COUNTY COMMISSION
+AGENDA ITEM: Redevelopment Master Plan ...`,
+    topics: ['development', 'urban_planning'],
+    keywords: ['redevelopment', 'master plan', 'downtown'],
+    processingStatus: 'completed',
+    ocrQuality: 92
+  },
+
+  // --- Public Health ---
+  {
+    id: '12',
+    meetingId: '1',
+    countyId: '1',
+    title: 'Community Health Needs Assessment',
+    type: 'minutes',
+    date: '2024-09-25T19:00:00Z',
+    content: 'Report on Johnson County health priorities for 2025...',
+    extractedText: `JOHNSON COUNTY HEALTH DEPARTMENT ...`,
+    topics: ['public_health', 'community_wellness'],
+    keywords: ['health assessment', 'community health', 'priorities'],
+    processingStatus: 'completed',
+    ocrQuality: 91
+  },
+  {
+    id: '13',
+    meetingId: '3',
+    countyId: '1',
+    title: 'Opioid Settlement Fund Allocation',
+    type: 'resolution',
+    date: '2024-09-20T19:30:00Z',
+    content: 'Resolution to allocate $4M in opioid settlement funds toward treatment and prevention...',
+    extractedText: `OVERLAND PARK CITY COUNCIL
+RESOLUTION 2024-22: Opioid Settlement Allocation ...`,
+    topics: ['public_health', 'funding', 'substance_abuse'],
+    keywords: ['opioid', 'settlement funds', 'treatment'],
+    processingStatus: 'completed',
+    ocrQuality: 94
+  },
+
+  // --- Governance & Finance ---
+  {
+    id: '14',
+    meetingId: '2',
+    countyId: '2',
+    title: '2025 County Budget Adoption',
+    type: 'ordinance',
+    date: '2024-09-23T09:00:00Z',
+    content: 'Ordinance adopting the FY2025 budget with adjustments for public safety and health...',
+    extractedText: `SEDGWICK COUNTY COMMISSION
+ORDINANCE 2024-12: 2025 Budget Adoption ...`,
+    topics: ['budget', 'finance', 'governance'],
+    keywords: ['budget', 'ordinance', 'finance'],
+    processingStatus: 'completed',
+    ocrQuality: 95
+  },
+  {
+    id: '15',
+    meetingId: '3',
+    countyId: '1',
+    title: 'Open Data Transparency Initiative',
+    type: 'agenda',
+    date: '2024-09-20T19:30:00Z',
+    content: 'Proposal to launch a public open data portal for county records...',
+    extractedText: `OVERLAND PARK CITY COUNCIL
+AGENDA ITEM: Open Data Portal ...`,
+    topics: ['governance', 'transparency', 'technology'],
+    keywords: ['open data', 'transparency', 'portal'],
+    processingStatus: 'completed',
+    ocrQuality: 93
   }
 ];
 

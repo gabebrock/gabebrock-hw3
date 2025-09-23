@@ -38,9 +38,9 @@ export function UserTypeSelection() {
   return (
     <div className="w-full max-w-6xl mx-auto">
       <div className="text-center mb-8">
-        <h2 className="text-3xl font-bold mb-4">Choose Your User Type</h2>
+        <h2 className="text-3xl font-bold mb-4">Try CivicPulse Demo</h2>
         <p className="text-lg text-muted-foreground">
-          Walk through how Reporters can use CivicPulse
+          Experience how Reporters use CivicPulse to track municipal policy changes
         </p>
       </div>
       
@@ -103,11 +103,28 @@ export function UserTypeSelection() {
       {selectedType && (
         <div className="text-center">
           <Button size="lg" className="gap-2" onClick={handleContinue}>
-            Continue as {userTypes.find(t => t.id === selectedType)?.title}
+            Start Demo as {userTypes.find(t => t.id === selectedType)?.title}
             <ArrowRight className="w-4 h-4" />
           </Button>
         </div>
       )}
+      
+      <div className="text-center mt-6">
+        <p className="text-sm text-muted-foreground mb-4">
+          No sign-up required • Full demo access • Sample data included
+        </p>
+        <div className="flex justify-center gap-4">
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={() => router.push('/dashboard')}
+            className="gap-2"
+          >
+            Skip to Dashboard
+            <ArrowRight className="w-3 h-3" />
+          </Button>
+        </div>
+      </div>
     </div>
   );
 }

@@ -4,21 +4,20 @@ import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { 
-  ArrowLeft,
-  Download, 
-  Share, 
+import {
   Bookmark,
+  Share,
+  Download,
   Eye,
   FileText,
   MapPin,
   Calendar,
   Search,
-  Highlighter,
-  ZoomIn,
-  ZoomOut
+  Highlighter
 } from "lucide-react";
 import { mockCounties, mockDocuments } from "@/lib/mock-data";
+import { ExportDialog } from "@/components/export-dialog";
+import { Navigation } from "@/components/navigation";
 import Link from "next/link";
 
 interface DocumentViewerProps {
@@ -29,19 +28,98 @@ export default function DocumentViewer({ params }: DocumentViewerProps) {
   const [viewMode, setViewMode] = useState<'split' | 'pdf' | 'text'>('split');
   const [highlightKeywords, setHighlightKeywords] = useState(true);
   const [id, setId] = useState<string>('');
+  const [isSaved, setIsSaved] = useState(false);
+  const [isExportOpen, setIsExportOpen] = useState(false);
+  const [user, setUser] = useState<{
+    id?: string;
+    name?: string;
+    email?: string;
+    type?: string;
+    savedItems?: string[];
+    preferences?: {
+      topics?: string[];
+      states?: string[];
+      keywords?: string[];
+    };
+  } | null>(null);
 
   // Extract id from params Promise
   useEffect(() => {
     params.then(({ id: paramId }) => setId(paramId));
   }, [params]);
 
+  // Load user data and check if document is saved
+  useEffect(() => {
+    try {
+      const userData = localStorage.getItem('civicpulse_user');
+      if (userData) {
+        const parsedUser = JSON.parse(userData);
+        setUser(parsedUser);
+        setIsSaved(parsedUser.savedItems?.includes(id) || false);
+      }
+    } catch (error) {
+      console.error('Error loading user data:', error);
+      // Set default user if localStorage fails
+      setUser({
+        name: 'John Reporter',
+        type: 'reporter',
+        savedItems: []
+      });
+    }
+  }, [id]);
+
   // Show loading state while id is being resolved
   if (!id) {
     return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
   }
+
+  const handleSaveToggle = () => {
+    if (!user) return;
+
+    const updatedUser = { ...user };
+    if (!updatedUser.savedItems) {
+      updatedUser.savedItems = [];
+    }
+
+    if (isSaved) {
+      // Remove from saved items
+      updatedUser.savedItems = updatedUser.savedItems.filter((docId: string) => docId !== id);
+      setIsSaved(false);
+    } else {
+      // Add to saved items
+      updatedUser.savedItems.push(id);
+      setIsSaved(true);
+    }
+
+    // Update localStorage and state
+    try {
+      localStorage.setItem('civicpulse_user', JSON.stringify(updatedUser));
+      setUser(updatedUser);
+    } catch (error) {
+      console.error('Error saving user data:', error);
+      // Revert the UI state if save fails
+      setIsSaved(!isSaved);
+    }
+  };
   
   // Mock document - in a real app this would be fetched based on the ID
-  const document = mockDocuments.find(doc => doc.id === id) || mockDocuments[0];
+  const document = mockDocuments.find(doc => doc.id === id);
+  
+  // Handle case where document doesn't exist
+  if (!document) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold mb-4">Document Not Found</h1>
+          <p className="text-muted-foreground mb-4">The requested document could not be found.</p>
+          <Link href="/search">
+            <Button>Back to Search</Button>
+          </Link>
+        </div>
+      </div>
+    );
+  }
+  
   const county = mockCounties.find(c => c.id === document.countyId);
 
   // Mock related documents
@@ -64,40 +142,11 @@ export default function DocumentViewer({ params }: DocumentViewerProps) {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b border-border">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center gap-4">
-              <Link href="/search" className="flex items-center gap-2 hover:underline">
-                <ArrowLeft className="w-4 h-4" />
-                Back to Search
-              </Link>
-              <div className="w-px h-6 bg-border" />
-              <Link href="/dashboard" className="flex items-center gap-2">
-                <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-                  <span className="text-white text-sm font-bold">CP</span>
-                </div>
-                <span className="font-semibold">CivicPulse</span>
-              </Link>
-            </div>
-            <div className="flex items-center gap-2">
-              <Button variant="outline" size="sm">
-                <Bookmark className="w-4 h-4 mr-2" />
-                Save
-              </Button>
-              <Button variant="outline" size="sm">
-                <Share className="w-4 h-4 mr-2" />
-                Share
-              </Button>
-              <Button variant="outline" size="sm">
-                <Download className="w-4 h-4 mr-2" />
-                Export
-              </Button>
-            </div>
-          </div>
-        </div>
-      </header>
+      <Navigation 
+        showBackButton={true}
+        backButtonText="Back to Search"
+        backButtonHref="/search"
+      />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Document Header */}
@@ -138,6 +187,38 @@ export default function DocumentViewer({ params }: DocumentViewerProps) {
             ))}
           </div>
 
+          {/* Document Actions */}
+          <div className="flex items-center gap-3 mb-6 p-4 bg-muted/30 rounded-lg">
+            <span className="text-sm font-medium text-muted-foreground">Actions:</span>
+            <Button 
+              variant={isSaved ? "default" : "outline"} 
+              size="sm"
+              onClick={handleSaveToggle}
+              className="gap-2"
+            >
+              <Bookmark className={`w-4 h-4 ${isSaved ? 'fill-current' : ''}`} />
+              {isSaved ? 'Saved' : 'Save'}
+            </Button>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={() => alert('Feature not implemented yet.')}
+              className="gap-2"
+            >
+              <Share className="w-4 h-4" />
+              Share
+            </Button>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={() => setIsExportOpen(true)}
+              className="gap-2"
+            >
+              <Download className="w-4 h-4" />
+              Export
+            </Button>
+          </div>
+
           {/* View Controls */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -171,12 +252,6 @@ export default function DocumentViewer({ params }: DocumentViewerProps) {
               >
                 <Highlighter className="w-4 h-4 mr-2" />
                 Highlight Keywords
-              </Button>
-              <Button variant="outline" size="sm">
-                <ZoomOut className="w-4 h-4" />
-              </Button>
-              <Button variant="outline" size="sm">
-                <ZoomIn className="w-4 h-4" />
               </Button>
             </div>
           </div>
@@ -363,6 +438,19 @@ export default function DocumentViewer({ params }: DocumentViewerProps) {
           </div>
         </div>
       </div>
+
+      {/* Export Dialog */}
+      <ExportDialog 
+        isOpen={isExportOpen}
+        onClose={() => setIsExportOpen(false)}
+        document={{
+          id: document.id,
+          title: document.title,
+          type: document.type,
+          countyId: document.countyId,
+          keywords: document.keywords
+        }}
+      />
     </div>
   );
 }
