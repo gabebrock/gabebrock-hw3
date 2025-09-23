@@ -20,7 +20,13 @@ import {
 interface ExportDialogProps {
   isOpen: boolean;
   onClose: () => void;
-  document: any;
+  document: {
+    id: string;
+    title: string;
+    type: string;
+    countyId: string;
+    keywords: string[];
+  };
 }
 
 export function ExportDialog({ isOpen, onClose, document }: ExportDialogProps) {
