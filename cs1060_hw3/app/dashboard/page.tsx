@@ -22,6 +22,7 @@ import Link from "next/link";
 
 export default function Dashboard() {
   const [searchQuery, setSearchQuery] = useState("");
+  const [filteredDocuments, setFilteredDocuments] = useState(mockDocuments);
   const [user, setUser] = useState<{
     id?: string;
     name: string;
@@ -71,6 +72,39 @@ export default function Dashboard() {
       });
     }
   }, []);
+
+  // Filter documents based on search query
+  useEffect(() => {
+    if (!searchQuery.trim()) {
+      setFilteredDocuments(mockDocuments);
+    } else {
+      const filtered = mockDocuments.filter(doc => {
+        const query = searchQuery.toLowerCase();
+        return (
+          doc.title.toLowerCase().includes(query) ||
+          doc.content.toLowerCase().includes(query) ||
+          doc.extractedText.toLowerCase().includes(query) ||
+          doc.keywords.some(keyword => keyword.toLowerCase().includes(query)) ||
+          doc.topics.some(topic => topic.toLowerCase().includes(query)) ||
+          mockCounties.find(c => c.id === doc.countyId)?.name.toLowerCase().includes(query)
+        );
+      });
+      setFilteredDocuments(filtered);
+    }
+  }, [searchQuery]);
+
+  // Function to highlight search terms in text
+  const highlightSearchTerms = (text: string, query: string) => {
+    if (!query.trim()) return text;
+    
+    const words = query.toLowerCase().split(/\s+/).filter(word => word.length > 0);
+    let highlightedText = text;
+    words.forEach(word => {
+      const regex = new RegExp(`(${word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+      highlightedText = highlightedText.replace(regex, '<mark class="bg-yellow-200 dark:bg-yellow-800">$1</mark>');
+    });
+    return highlightedText;
+  };
 
   const recentAlerts = [
     {
@@ -153,17 +187,30 @@ export default function Dashboard() {
                 <CardTitle className="flex items-center gap-2">
                   <Eye className="w-5 h-5" />
                   Watchlist Feed
+                  {searchQuery && (
+                    <Badge variant="secondary" className="ml-2">
+                      {filteredDocuments.length} results
+                    </Badge>
+                  )}
                 </CardTitle>
                 <CardDescription>
-                  Recent items matching your keywords and interests
+                  {searchQuery 
+                    ? `Showing ${Math.min(5, filteredDocuments.length)} of ${filteredDocuments.length} results for "${searchQuery}"`
+                    : "Recent items matching your keywords and interests"
+                  }
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                {mockDocuments.map((doc) => (
+                {filteredDocuments.slice(0, 5).map((doc) => (
                   <Link key={doc.id} href={`/document/${doc.id}`}>
                     <div className="border rounded-lg p-4 hover:bg-muted/50 transition-colors cursor-pointer">
                       <div className="flex justify-between items-start mb-2">
-                        <h3 className="font-medium hover:text-blue-600">{doc.title}</h3>
+                        <h3 
+                          className="font-medium hover:text-blue-600"
+                          dangerouslySetInnerHTML={{
+                            __html: highlightSearchTerms(doc.title, searchQuery)
+                          }}
+                        />
                         <div className="flex items-center gap-2">
                         <Badge variant="outline">{doc.type}</Badge>
                           {/* High-Confidence Match Indicator - only show if topics match user preferences */}
@@ -194,9 +241,12 @@ export default function Dashboard() {
                           OCR Quality: {doc.ocrQuality}%
                         </span>
                       </div>
-                      <p className="text-sm text-muted-foreground mb-3">
-                        {doc.extractedText.substring(0, 200)}...
-                      </p>
+                      <p 
+                        className="text-sm text-muted-foreground mb-3"
+                        dangerouslySetInnerHTML={{
+                          __html: highlightSearchTerms(doc.extractedText.substring(0, 200), searchQuery) + '...'
+                        }}
+                      />
                       <div className="flex flex-wrap gap-1">
                         {doc.keywords.slice(0, 4).map((keyword, index) => (
                           <Badge key={index} variant="secondary" className="text-xs">
@@ -207,6 +257,16 @@ export default function Dashboard() {
                     </div>
                   </Link>
                 ))}
+                
+                {filteredDocuments.length === 0 && searchQuery && (
+                  <div className="text-center py-8">
+                    <Search className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+                    <h3 className="text-lg font-medium mb-2">No results found</h3>
+                    <p className="text-muted-foreground">
+                      No documents match your search for "{searchQuery}"
+                    </p>
+                  </div>
+                )}
               </CardContent>
             </Card>
 

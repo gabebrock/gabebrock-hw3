@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -35,16 +35,61 @@ export default function SearchPage() {
   const topics = ["education", "renewable_energy", "transit", "housing", "development", "zoning"];
   const docTypes = ["agenda", "minutes", "resolution", "ordinance"];
 
-  const handleSearch = () => {
-    // Mock search logic - in a real app this would query the backend
+  // Function to highlight search terms in text
+  const highlightSearchTerms = (text: string, query: string) => {
+    if (!query.trim()) return text;
+    
+    const isPhrase = query.startsWith('"') && query.endsWith('"');
+    const searchTerm = isPhrase ? query.slice(1, -1) : query;
+    
+    if (isPhrase) {
+      // Highlight exact phrase
+      const regex = new RegExp(`(${searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+      return text.replace(regex, '<mark class="bg-yellow-200 dark:bg-yellow-800">$1</mark>');
+    } else {
+      // Highlight individual words
+      const words = searchTerm.split(/\s+/).filter(word => word.length > 0);
+      let highlightedText = text;
+      words.forEach(word => {
+        const regex = new RegExp(`(${word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+        highlightedText = highlightedText.replace(regex, '<mark class="bg-yellow-200 dark:bg-yellow-800">$1</mark>');
+      });
+      return highlightedText;
+    }
+  };
+
+  // Real-time filtering - trigger search when any filter changes
+  useEffect(() => {
+    const performSearch = () => {
+    // Enhanced search logic with better phrase matching
     let filtered = mockDocuments;
     
-    if (searchQuery) {
-      filtered = filtered.filter(doc => 
-        doc.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        doc.extractedText.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        doc.keywords.some(keyword => keyword.toLowerCase().includes(searchQuery.toLowerCase()))
-      );
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase().trim();
+      
+      // Check for exact phrase matches (quoted strings)
+      const isPhrase = query.startsWith('"') && query.endsWith('"');
+      const searchTerm = isPhrase ? query.slice(1, -1) : query;
+      
+      filtered = filtered.filter(doc => {
+        const searchableText = [
+          doc.title,
+          doc.content,
+          doc.extractedText,
+          ...doc.keywords,
+          ...doc.topics,
+          mockCounties.find(c => c.id === doc.countyId)?.name || ''
+        ].join(' ').toLowerCase();
+        
+        if (isPhrase) {
+          // Exact phrase matching
+          return searchableText.includes(searchTerm);
+        } else {
+          // Split query into words and check if all words are present
+          const words = searchTerm.split(/\s+/).filter(word => word.length > 0);
+          return words.every(word => searchableText.includes(word));
+        }
+      });
     }
     
     if (selectedCounties.length > 0) {
@@ -61,7 +106,28 @@ export default function SearchPage() {
       filtered = filtered.filter(doc => selectedDocTypes.includes(doc.type));
     }
     
+    // Date range filtering
+    if (dateRange.start || dateRange.end) {
+      filtered = filtered.filter(doc => {
+        const docDate = new Date(doc.date);
+        const startDate = dateRange.start ? new Date(dateRange.start) : null;
+        const endDate = dateRange.end ? new Date(dateRange.end) : null;
+        
+        if (startDate && docDate < startDate) return false;
+        if (endDate && docDate > endDate) return false;
+        return true;
+      });
+    }
+    
     setSearchResults(filtered);
+    };
+    
+    performSearch();
+  }, [searchQuery, selectedCounties, selectedTopics, selectedDocTypes, dateRange]);
+
+  const handleSearch = () => {
+    // This function is now mainly for the manual search button
+    // Real-time search is handled by useEffect above
   };
 
   const handleCountyChange = (countyId: string, checked: boolean) => {
@@ -113,9 +179,13 @@ export default function SearchPage() {
         {/* Search Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-4">Search Municipal Documents</h1>
-          <p className="text-muted-foreground mb-6">
+          <p className="text-muted-foreground mb-4">
             Find agendas, minutes, resolutions, and ordinances across Kansas counties
           </p>
+          <div className="text-sm text-muted-foreground mb-6 bg-muted/30 p-3 rounded-lg">
+            <strong>Search Tips:</strong> Use quotes for exact phrases ("cell phone policy"), 
+            search by county name, topic, or keywords. Results update as you type.
+          </div>
           
           {/* Main Search Bar */}
           <div className="flex gap-4 mb-4">
@@ -267,9 +337,12 @@ export default function SearchPage() {
                     <div className="flex justify-between items-start mb-3">
                       <div className="flex-1">
                         <Link href={`/document/${doc.id}`}>
-                          <h3 className="text-lg font-medium mb-2 hover:text-blue-600 cursor-pointer">
-                            {doc.title}
-                          </h3>
+                          <h3 
+                            className="text-lg font-medium mb-2 hover:text-blue-600 cursor-pointer"
+                            dangerouslySetInnerHTML={{
+                              __html: highlightSearchTerms(doc.title, searchQuery)
+                            }}
+                          />
                         </Link>
                         <div className="flex items-center gap-4 text-sm text-muted-foreground mb-3">
                           <span className="flex items-center gap-1">
@@ -301,9 +374,12 @@ export default function SearchPage() {
                       </div>
                     </div>
                     
-                    <p className="text-sm text-muted-foreground mb-4 line-clamp-3">
-                      {doc.extractedText.substring(0, 300)}...
-                    </p>
+                    <p 
+                      className="text-sm text-muted-foreground mb-4 line-clamp-3"
+                      dangerouslySetInnerHTML={{
+                        __html: highlightSearchTerms(doc.extractedText.substring(0, 300), searchQuery) + '...'
+                      }}
+                    />
                     
                     <div className="flex flex-wrap gap-2 mb-3">
                       {doc.keywords.slice(0, 5).map((keyword, index) => (
