@@ -1,8 +1,10 @@
-import { updateSession } from "@/lib/supabase/middleware";
+// Authentication middleware disabled for demo purposes
+// import { updateSession } from "@/lib/supabase/middleware";
 import { type NextRequest } from "next/server";
 
 export async function middleware(request: NextRequest) {
-  return await updateSession(request);
+  // Skip authentication - allow all requests to pass through
+  return;
 }
 
 export const config = {
