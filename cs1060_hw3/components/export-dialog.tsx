@@ -39,24 +39,8 @@ export function ExportDialog({ isOpen, onClose, document }: ExportDialogProps) {
   if (!isOpen) return null;
 
   const handleExport = (format: 'pdf' | 'docx' | 'email' | 'link') => {
-    // Mock export functionality
-    console.log(`Exporting ${exportType} report as ${format}`, {
-      includeCharts,
-      includeQuotes,
-      includeContext,
-      recipientEmail
-    });
-    
-    // Simulate download or sharing
-    if (format === 'email') {
-      alert(`Report sent to ${recipientEmail}`);
-    } else if (format === 'link') {
-      navigator.clipboard.writeText(`https://civicpulse.app/shared/${document.id}`);
-      alert('Shareable link copied to clipboard');
-    } else {
-      alert(`Downloading ${format.toUpperCase()} report...`);
-    }
-    
+    // Show not implemented message for all export options
+    alert('Feature not implemented yet.');
     onClose();
   };
 

@@ -106,7 +106,23 @@ export default function DocumentViewer({ params }: DocumentViewerProps) {
   };
   
   // Mock document - in a real app this would be fetched based on the ID
-  const document = mockDocuments.find(doc => doc.id === id) || mockDocuments[0];
+  const document = mockDocuments.find(doc => doc.id === id);
+  
+  // Handle case where document doesn't exist
+  if (!document) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold mb-4">Document Not Found</h1>
+          <p className="text-muted-foreground mb-4">The requested document could not be found.</p>
+          <Link href="/search">
+            <Button>Back to Search</Button>
+          </Link>
+        </div>
+      </div>
+    );
+  }
+  
   const county = mockCounties.find(c => c.id === document.countyId);
 
   // Mock related documents

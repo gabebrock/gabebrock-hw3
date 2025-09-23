@@ -58,8 +58,9 @@ export default function AccountPage() {
   const states = ["Kansas", "Missouri", "Iowa", "Nebraska", "Oklahoma", "Colorado"];
 
   useEffect(() => {
-    const userData = localStorage.getItem('civicpulse_user');
-    if (userData) {
+    try {
+      const userData = localStorage.getItem('civicpulse_user');
+      if (userData) {
       const parsedUser = JSON.parse(userData);
       // Add some additional account info for John
       const enhancedUser = {
@@ -87,10 +88,27 @@ export default function AccountPage() {
         savedItems: [] // Initialize empty saved items
       };
       
-      // Save to localStorage and set state
-      localStorage.setItem('civicpulse_user', JSON.stringify(defaultUser));
-      setUser(defaultUser);
-      setEditedUser(defaultUser);
+        // Save to localStorage and set state
+        localStorage.setItem('civicpulse_user', JSON.stringify(defaultUser));
+        setUser(defaultUser);
+        setEditedUser(defaultUser);
+      }
+    } catch (error) {
+      console.error('Error loading user data:', error);
+      // Create minimal fallback user
+      const fallbackUser = {
+        id: 'fallback_user',
+        name: 'John Reporter',
+        email: 'john@newsroom.com',
+        type: 'reporter',
+        preferences: { topics: [], states: [], keywords: [] },
+        loginTime: new Date().toISOString(),
+        accountCreated: '2024-08-15T10:30:00Z',
+        lastActive: new Date().toISOString(),
+        savedItems: []
+      };
+      setUser(fallbackUser);
+      setEditedUser(fallbackUser);
     }
   }, [router]);
 
@@ -101,9 +119,14 @@ export default function AccountPage() {
 
   const handleSave = () => {
     if (editedUser) {
-      localStorage.setItem('civicpulse_user', JSON.stringify(editedUser));
-      setUser(editedUser);
-      setIsEditing(false);
+      try {
+        localStorage.setItem('civicpulse_user', JSON.stringify(editedUser));
+        setUser(editedUser);
+        setIsEditing(false);
+      } catch (error) {
+        console.error('Error saving user data:', error);
+        alert('Failed to save changes. Please try again.');
+      }
     }
   };
 
