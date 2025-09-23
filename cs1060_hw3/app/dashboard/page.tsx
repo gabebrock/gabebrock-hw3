@@ -156,8 +156,14 @@ export default function Dashboard() {
                         <h3 className="font-medium hover:text-blue-600">{doc.title}</h3>
                         <div className="flex items-center gap-2">
                         <Badge variant="outline">{doc.type}</Badge>
-                          {/* High-Confidence Match Indicator */}
-                          {doc.keywords.length >= 3 && (
+                          {/* High-Confidence Match Indicator - only show if topics match user preferences */}
+                          {doc.keywords.length >= 3 && 
+                           user?.preferences?.topics?.some(userTopic => 
+                             doc.topics.some(docTopic => 
+                               userTopic.toLowerCase().includes(docTopic.toLowerCase()) ||
+                               docTopic.toLowerCase().includes(userTopic.toLowerCase())
+                             )
+                           ) && (
                             <Badge className="bg-red-100 text-red-800 border-red-200">
                               High-Confidence Match
                             </Badge>

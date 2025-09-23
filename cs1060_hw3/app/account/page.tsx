@@ -18,10 +18,8 @@ import {
   Save,
   X,
   Plus,
-  Trash2,
   Eye,
   Download,
-  Mail,
   Bookmark,
   Search
 } from "lucide-react";
@@ -475,7 +473,7 @@ export default function AccountPage() {
                   Saved Documents
                 </CardTitle>
                 <CardDescription>
-                  Documents you've bookmarked for later reference
+                  Documents you&apos;ve bookmarked for later reference
                 </CardDescription>
               </CardHeader>
               <CardContent>

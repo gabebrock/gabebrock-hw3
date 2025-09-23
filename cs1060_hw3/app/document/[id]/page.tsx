@@ -31,7 +31,18 @@ export default function DocumentViewer({ params }: DocumentViewerProps) {
   const [highlightKeywords, setHighlightKeywords] = useState(true);
   const [id, setId] = useState<string>('');
   const [isSaved, setIsSaved] = useState(false);
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<{
+    id?: string;
+    name?: string;
+    email?: string;
+    type?: string;
+    savedItems?: string[];
+    preferences?: {
+      topics?: string[];
+      states?: string[];
+      keywords?: string[];
+    };
+  } | null>(null);
 
   // Extract id from params Promise
   useEffect(() => {
