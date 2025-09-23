@@ -30,16 +30,51 @@ export default function DocumentViewer({ params }: DocumentViewerProps) {
   const [viewMode, setViewMode] = useState<'split' | 'pdf' | 'text'>('split');
   const [highlightKeywords, setHighlightKeywords] = useState(true);
   const [id, setId] = useState<string>('');
+  const [isSaved, setIsSaved] = useState(false);
+  const [user, setUser] = useState<any>(null);
 
   // Extract id from params Promise
   useEffect(() => {
     params.then(({ id: paramId }) => setId(paramId));
   }, [params]);
 
+  // Load user data and check if document is saved
+  useEffect(() => {
+    const userData = localStorage.getItem('civicpulse_user');
+    if (userData) {
+      const parsedUser = JSON.parse(userData);
+      setUser(parsedUser);
+      setIsSaved(parsedUser.savedItems?.includes(id) || false);
+    }
+  }, [id]);
+
   // Show loading state while id is being resolved
   if (!id) {
     return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
   }
+
+  const handleSaveToggle = () => {
+    if (!user) return;
+
+    const updatedUser = { ...user };
+    if (!updatedUser.savedItems) {
+      updatedUser.savedItems = [];
+    }
+
+    if (isSaved) {
+      // Remove from saved items
+      updatedUser.savedItems = updatedUser.savedItems.filter((docId: string) => docId !== id);
+      setIsSaved(false);
+    } else {
+      // Add to saved items
+      updatedUser.savedItems.push(id);
+      setIsSaved(true);
+    }
+
+    // Update localStorage and state
+    localStorage.setItem('civicpulse_user', JSON.stringify(updatedUser));
+    setUser(updatedUser);
+  };
   
   // Mock document - in a real app this would be fetched based on the ID
   const document = mockDocuments.find(doc => doc.id === id) || mockDocuments[0];
@@ -82,10 +117,20 @@ export default function DocumentViewer({ params }: DocumentViewerProps) {
                 <span className="font-semibold">CivicPulse</span>
               </Link>
             </div>
+            <nav className="flex items-center gap-4">
+              <Link href="/dashboard" className="text-sm hover:underline">Dashboard</Link>
+              <Link href="/search" className="text-sm hover:underline">Search</Link>
+              <Link href="/trends" className="text-sm hover:underline">Trends</Link>
+              <Link href="/account" className="text-sm hover:underline">Account</Link>
+            </nav>
             <div className="flex items-center gap-2">
-              <Button variant="outline" size="sm">
-                <Bookmark className="w-4 h-4 mr-2" />
-                Save
+              <Button 
+                variant={isSaved ? "default" : "outline"} 
+                size="sm"
+                onClick={handleSaveToggle}
+              >
+                <Bookmark className={`w-4 h-4 mr-2 ${isSaved ? 'fill-current' : ''}`} />
+                {isSaved ? 'Saved' : 'Save'}
               </Button>
               <Button variant="outline" size="sm">
                 <Share className="w-4 h-4 mr-2" />

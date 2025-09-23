@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -22,10 +22,45 @@ import Link from "next/link";
 
 export default function Dashboard() {
   const [searchQuery, setSearchQuery] = useState("");
+  const [user, setUser] = useState<{
+    id?: string;
+    name: string;
+    email?: string;
+    type: string;
+    preferences?: {
+      topics?: string[];
+      states?: string[];
+      keywords?: string[];
+    };
+    loginTime?: string;
+  } | null>(null);
 
-  // Mock user data - in a real app this would come from authentication
-  const userType = "reporter"; // reporter, strategist, advocate, developer
-  const userName = "John Reporter";
+  // Load user data from localStorage (simulating authentication)
+  useEffect(() => {
+    const userData = localStorage.getItem('civicpulse_user');
+    if (userData) {
+      setUser(JSON.parse(userData));
+    } else {
+      // Create default John Reporter user if none exists
+      const defaultUser = {
+        id: 'john_reporter_001',
+        name: 'John Reporter',
+        email: 'john@newsroom.com',
+        type: 'reporter',
+        preferences: {
+          topics: ['Education', 'Public Schools'],
+          states: ['Kansas', 'Missouri'],
+          keywords: ['cell phone ban', 'curriculum', 'book policy']
+        },
+        loginTime: new Date().toISOString(),
+        savedItems: [] // Initialize empty saved items
+      };
+      
+      // Save to localStorage and set state
+      localStorage.setItem('civicpulse_user', JSON.stringify(defaultUser));
+      setUser(defaultUser);
+    }
+  }, []);
 
   const recentAlerts = [
     {
@@ -66,13 +101,15 @@ export default function Dashboard() {
                 </div>
                 <span className="font-semibold">CivicPulse</span>
               </Link>
-              <Badge variant="secondary">{userType}</Badge>
+              <Badge variant="secondary">{user?.type || 'reporter'}</Badge>
             </div>
             <div className="flex items-center gap-4">
               <Button variant="ghost" size="sm">
                 <Bell className="w-4 h-4" />
               </Button>
-              <div className="text-sm">Welcome, {userName}</div>
+              <Link href="/account" className="text-sm hover:underline">
+                {user?.name || 'User'}
+              </Link>
             </div>
           </div>
         </div>
