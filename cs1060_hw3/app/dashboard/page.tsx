@@ -263,7 +263,7 @@ export default function Dashboard() {
                     <Search className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
                     <h3 className="text-lg font-medium mb-2">No results found</h3>
                     <p className="text-muted-foreground">
-                      No documents match your search for "{searchQuery}"
+                      No documents match your search for &quot;{searchQuery}&quot;
                     </p>
                   </div>
                 )}

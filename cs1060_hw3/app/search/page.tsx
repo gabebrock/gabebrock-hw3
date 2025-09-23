@@ -183,7 +183,7 @@ export default function SearchPage() {
             Find agendas, minutes, resolutions, and ordinances across Kansas counties
           </p>
           <div className="text-sm text-muted-foreground mb-6 bg-muted/30 p-3 rounded-lg">
-            <strong>Search Tips:</strong> Use quotes for exact phrases ("cell phone policy"), 
+            <strong>Search Tips:</strong> Use quotes for exact phrases (&quot;cell phone policy&quot;), 
             search by county name, topic, or keywords. Results update as you type.
           </div>
           
