@@ -29,7 +29,7 @@ interface ExportDialogProps {
   };
 }
 
-export function ExportDialog({ isOpen, onClose, document }: ExportDialogProps) {
+export function ExportDialog({ isOpen, onClose }: ExportDialogProps) {
   const [exportType, setExportType] = useState<'summary' | 'full' | 'custom'>('summary');
   const [includeCharts, setIncludeCharts] = useState(true);
   const [includeQuotes, setIncludeQuotes] = useState(true);
@@ -38,7 +38,7 @@ export function ExportDialog({ isOpen, onClose, document }: ExportDialogProps) {
 
   if (!isOpen) return null;
 
-  const handleExport = (format: 'pdf' | 'docx' | 'email' | 'link') => {
+  const handleExport = () => {
     // Show not implemented message for all export options
     alert('Feature not implemented yet.');
     onClose();
@@ -155,7 +155,7 @@ export function ExportDialog({ isOpen, onClose, document }: ExportDialogProps) {
                 <Button 
                   variant="outline" 
                   className="w-full justify-start" 
-                  onClick={() => handleExport('pdf')}
+                  onClick={() => handleExport()}
                 >
                   <Download className="w-4 h-4 mr-2" />
                   Download PDF
@@ -163,7 +163,7 @@ export function ExportDialog({ isOpen, onClose, document }: ExportDialogProps) {
                 <Button 
                   variant="outline" 
                   className="w-full justify-start"
-                  onClick={() => handleExport('docx')}
+                  onClick={() => handleExport()}
                 >
                   <FileText className="w-4 h-4 mr-2" />
                   Download Word Doc
@@ -183,7 +183,7 @@ export function ExportDialog({ isOpen, onClose, document }: ExportDialogProps) {
                   />
                   <Button 
                     size="sm"
-                    onClick={() => handleExport('email')}
+                    onClick={() => handleExport()}
                     disabled={!recipientEmail}
                   >
                     <Mail className="w-4 h-4" />
@@ -192,7 +192,7 @@ export function ExportDialog({ isOpen, onClose, document }: ExportDialogProps) {
                 <Button 
                   variant="outline" 
                   className="w-full justify-start"
-                  onClick={() => handleExport('link')}
+                  onClick={() => handleExport()}
                 >
                   <LinkIcon className="w-4 h-4 mr-2" />
                   Copy Share Link
