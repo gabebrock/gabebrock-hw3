@@ -15,7 +15,8 @@ import {
   FileText, 
   Eye,
   Download,
-  Share
+  Share,
+  TrendingUp
 } from "lucide-react";
 import { mockCounties, mockDocuments, Document } from "@/lib/mock-data";
 import Link from "next/link";
@@ -95,7 +96,7 @@ export default function SearchPage() {
           <div className="flex justify-between items-center h-16">
             <Link href="/dashboard" className="flex items-center gap-2">
               <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-                <span className="text-white text-sm font-bold">CP</span>
+                <TrendingUp className="w-4 h-4 text-white" />
               </div>
               <span className="font-semibold">CivicPulse</span>
             </Link>

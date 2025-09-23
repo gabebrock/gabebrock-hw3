@@ -5,6 +5,7 @@ import { ThemeSwitcher } from "@/components/theme-switcher";
 import { UserTypeSelection } from "@/components/user-type-selection";
 import { ConnectSupabaseSteps } from "@/components/tutorial/connect-supabase-steps";
 import { hasEnvVars } from "@/lib/utils";
+import { TrendingUp } from "lucide-react";
 import Link from "next/link";
 
 export default function Home() {
@@ -16,7 +17,7 @@ export default function Home() {
             <div className="flex gap-5 items-center font-semibold">
               <Link href={"/"} className="flex items-center gap-2">
                 <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-                  <span className="text-white text-sm font-bold">CP</span>
+                  <TrendingUp className="w-4 h-4 text-white" />
                 </div>
                 CivicPulse
               </Link>
