@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Newspaper, Target, Users, Code, ArrowRight, Check } from "lucide-react";
+import { Newspaper, ArrowRight, Check } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 const userTypes = [
@@ -21,45 +21,7 @@ const userTypes = [
     ],
     example: "John covers education policy and needs early alerts on school board decisions"
   },
-  {
-    id: "strategist",
-    title: "Policy Strategist", 
-    description: "Monitor policy landscapes and identify emerging risks",
-    icon: Target,
-    features: [
-      "Advanced filtering & analysis",
-      "Risk assessment tools",
-      "Comparative jurisdiction analysis",
-      "Meeting calendar integration"
-    ],
-    example: "Maya tracks renewable energy policies for strategic planning"
-  },
-  {
-    id: "advocate",
-    title: "Community Advocate",
-    description: "Stay informed on local issues affecting your community",
-    icon: Users,
-    features: [
-      "Issue-focused searches",
-      "Basic export capabilities",
-      "Community impact tracking",
-      "Meeting notifications"
-    ],
-    example: "Schmidt monitors transit discussions affecting local communities"
-  },
-  {
-    id: "developer",
-    title: "Developer/API User",
-    description: "Access structured data for applications and research",
-    icon: Code,
-    features: [
-      "API access",
-      "Bulk data exports",
-      "Custom integrations",
-      "Developer documentation"
-    ],
-    example: "Build applications using municipal data feeds"
-  }
+
 ];
 
 export function UserTypeSelection() {
@@ -78,11 +40,12 @@ export function UserTypeSelection() {
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold mb-4">Choose Your User Type</h2>
         <p className="text-lg text-muted-foreground">
-          Get a customized experience based on how you&apos;ll use CivicPulse
+          Walk through how Reporters can use CivicPulse
         </p>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+      <div className="flex justify-center mb-8">
+        <div className="w-full max-w-md">
         {userTypes.map((type) => {
           const Icon = type.icon;
           const isSelected = selectedType === type.id;
@@ -134,6 +97,7 @@ export function UserTypeSelection() {
             </Card>
           );
         })}
+        </div>
       </div>
 
       {selectedType && (
@@ -142,17 +106,8 @@ export function UserTypeSelection() {
             Continue as {userTypes.find(t => t.id === selectedType)?.title}
             <ArrowRight className="w-4 h-4" />
           </Button>
-          <p className="text-sm text-muted-foreground mt-2">
-            You can change this later in your account settings
-          </p>
         </div>
       )}
-
-      <div className="mt-12 text-center">
-        <Button variant="outline" size="sm">
-          Continue as Guest (Limited Features)
-        </Button>
-      </div>
     </div>
   );
 }
