@@ -252,14 +252,6 @@ export default function AccountPage() {
                     <span>{user.savedItems?.length || 0}</span>
                   </div>
                 </div>
-
-                <Button 
-                  variant="outline" 
-                  className="w-full mt-4"
-                  onClick={handleLogout}
-                >
-                  Sign Out
-                </Button>
               </CardContent>
             </Card>
 
