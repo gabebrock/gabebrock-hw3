@@ -37,10 +37,11 @@ export default function Dashboard() {
 
   // Load user data from localStorage (simulating authentication)
   useEffect(() => {
-    const userData = localStorage.getItem('civicpulse_user');
-    if (userData) {
-      setUser(JSON.parse(userData));
-    } else {
+    try {
+      const userData = localStorage.getItem('civicpulse_user');
+      if (userData) {
+        setUser(JSON.parse(userData));
+      } else {
       // Create default John Reporter user if none exists
       const defaultUser = {
         id: 'john_reporter_001',
@@ -56,9 +57,18 @@ export default function Dashboard() {
         savedItems: [] // Initialize empty saved items
       };
       
-      // Save to localStorage and set state
-      localStorage.setItem('civicpulse_user', JSON.stringify(defaultUser));
-      setUser(defaultUser);
+        // Save to localStorage and set state
+        localStorage.setItem('civicpulse_user', JSON.stringify(defaultUser));
+        setUser(defaultUser);
+      }
+    } catch (error) {
+      console.error('Error loading user data:', error);
+      // Fallback to default user if localStorage fails
+      setUser({
+        name: 'John Reporter',
+        type: 'reporter',
+        preferences: { keywords: [] }
+      });
     }
   }, []);
 

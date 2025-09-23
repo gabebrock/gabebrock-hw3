@@ -32,6 +32,7 @@ export default function DocumentViewer({ params }: DocumentViewerProps) {
   const [highlightKeywords, setHighlightKeywords] = useState(true);
   const [id, setId] = useState<string>('');
   const [isSaved, setIsSaved] = useState(false);
+  const [isExportOpen, setIsExportOpen] = useState(false);
   const [user, setUser] = useState<{
     id?: string;
     name?: string;
@@ -52,11 +53,21 @@ export default function DocumentViewer({ params }: DocumentViewerProps) {
 
   // Load user data and check if document is saved
   useEffect(() => {
-    const userData = localStorage.getItem('civicpulse_user');
-    if (userData) {
-      const parsedUser = JSON.parse(userData);
-      setUser(parsedUser);
-      setIsSaved(parsedUser.savedItems?.includes(id) || false);
+    try {
+      const userData = localStorage.getItem('civicpulse_user');
+      if (userData) {
+        const parsedUser = JSON.parse(userData);
+        setUser(parsedUser);
+        setIsSaved(parsedUser.savedItems?.includes(id) || false);
+      }
+    } catch (error) {
+      console.error('Error loading user data:', error);
+      // Set default user if localStorage fails
+      setUser({
+        name: 'John Reporter',
+        type: 'reporter',
+        savedItems: []
+      });
     }
   }, [id]);
 
@@ -84,8 +95,14 @@ export default function DocumentViewer({ params }: DocumentViewerProps) {
     }
 
     // Update localStorage and state
-    localStorage.setItem('civicpulse_user', JSON.stringify(updatedUser));
-    setUser(updatedUser);
+    try {
+      localStorage.setItem('civicpulse_user', JSON.stringify(updatedUser));
+      setUser(updatedUser);
+    } catch (error) {
+      console.error('Error saving user data:', error);
+      // Revert the UI state if save fails
+      setIsSaved(!isSaved);
+    }
   };
   
   // Mock document - in a real app this would be fetched based on the ID
@@ -148,7 +165,7 @@ export default function DocumentViewer({ params }: DocumentViewerProps) {
                 <Share className="w-4 h-4 mr-2" />
                 Share
               </Button>
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="sm" onClick={() => setIsExportOpen(true)}>
                 <Download className="w-4 h-4 mr-2" />
                 Export
               </Button>
@@ -421,6 +438,19 @@ export default function DocumentViewer({ params }: DocumentViewerProps) {
           </div>
         </div>
       </div>
+
+      {/* Export Dialog */}
+      <ExportDialog 
+        isOpen={isExportOpen}
+        onClose={() => setIsExportOpen(false)}
+        document={{
+          id: document.id,
+          title: document.title,
+          type: document.type,
+          countyId: document.countyId,
+          keywords: document.keywords
+        }}
+      />
     </div>
   );
 }
