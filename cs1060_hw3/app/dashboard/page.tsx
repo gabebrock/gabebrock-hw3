@@ -18,6 +18,7 @@ import {
   Filter
 } from "lucide-react";
 import { mockCounties, mockDocuments, mockTrends, mockMeetings } from "@/lib/mock-data";
+import { Navigation } from "@/components/navigation";
 import Link from "next/link";
 
 export default function Dashboard() {
@@ -134,30 +135,7 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b border-border">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center gap-4">
-              <Link href="/" className="flex items-center gap-2">
-                <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-                  <TrendingUp className="w-4 h-4 text-white" />
-                </div>
-                <span className="font-semibold">CivicPulse</span>
-              </Link>
-              <Badge variant="secondary">{user?.type || 'reporter'}</Badge>
-            </div>
-            <div className="flex items-center gap-4">
-              <Button variant="ghost" size="sm">
-                <Bell className="w-4 h-4" />
-              </Button>
-              <Link href="/account" className="text-sm hover:underline">
-                {user?.name || 'User'}
-              </Link>
-            </div>
-          </div>
-        </div>
-      </header>
+      <Navigation />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Quick Search */}

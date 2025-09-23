@@ -17,6 +17,7 @@ import {
   TrendingUp
 } from "lucide-react";
 import { mockCounties, mockTrends, mockDocuments } from "@/lib/mock-data";
+import { Navigation } from "@/components/navigation";
 import Link from "next/link";
 
 export default function TrendsPage() {
@@ -55,24 +56,7 @@ export default function TrendsPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b border-border">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <Link href="/dashboard" className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-                <TrendingUp className="w-4 h-4 text-white" />
-              </div>
-              <span className="font-semibold">CivicPulse</span>
-            </Link>
-            <nav className="flex items-center gap-4">
-              <Link href="/dashboard" className="text-sm hover:underline">Dashboard</Link>
-              <Link href="/search" className="text-sm hover:underline">Search</Link>
-              <Link href="/trends" className="text-sm font-medium">Trends</Link>
-            </nav>
-          </div>
-        </div>
-      </header>
+      <Navigation />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Page Header */}

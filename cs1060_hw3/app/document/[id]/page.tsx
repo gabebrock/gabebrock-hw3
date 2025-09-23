@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { mockCounties, mockDocuments } from "@/lib/mock-data";
 import { ExportDialog } from "@/components/export-dialog";
+import { Navigation } from "@/components/navigation";
 import Link from "next/link";
 
 interface DocumentViewerProps {
@@ -143,50 +144,11 @@ export default function DocumentViewer({ params }: DocumentViewerProps) {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b border-border">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center gap-4">
-              <Link href="/search" className="flex items-center gap-2 hover:underline">
-                <ArrowLeft className="w-4 h-4" />
-                Back to Search
-              </Link>
-              <div className="w-px h-6 bg-border" />
-              <Link href="/dashboard" className="flex items-center gap-2">
-                <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-                  <TrendingUp className="w-4 h-4 text-white" />
-                </div>
-                <span className="font-semibold">CivicPulse</span>
-              </Link>
-            </div>
-            <nav className="flex items-center gap-4">
-              <Link href="/dashboard" className="text-sm hover:underline">Dashboard</Link>
-              <Link href="/search" className="text-sm hover:underline">Search</Link>
-              <Link href="/trends" className="text-sm hover:underline">Trends</Link>
-              <Link href="/account" className="text-sm hover:underline">Account</Link>
-            </nav>
-            <div className="flex items-center gap-2">
-              <Button 
-                variant={isSaved ? "default" : "outline"} 
-                size="sm"
-                onClick={handleSaveToggle}
-              >
-                <Bookmark className={`w-4 h-4 mr-2 ${isSaved ? 'fill-current' : ''}`} />
-                {isSaved ? 'Saved' : 'Save'}
-              </Button>
-              <Button variant="outline" size="sm" onClick={() => alert('Feature not implemented yet.')}>
-                <Share className="w-4 h-4 mr-2" />
-                Share
-              </Button>
-              <Button variant="outline" size="sm" onClick={() => setIsExportOpen(true)}>
-                <Download className="w-4 h-4 mr-2" />
-                Export
-              </Button>
-            </div>
-          </div>
-        </div>
-      </header>
+      <Navigation 
+        showBackButton={true}
+        backButtonText="Back to Search"
+        backButtonHref="/search"
+      />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Document Header */}
@@ -225,6 +187,38 @@ export default function DocumentViewer({ params }: DocumentViewerProps) {
                 {keyword}
               </Badge>
             ))}
+          </div>
+
+          {/* Document Actions */}
+          <div className="flex items-center gap-3 mb-6 p-4 bg-muted/30 rounded-lg">
+            <span className="text-sm font-medium text-muted-foreground">Actions:</span>
+            <Button 
+              variant={isSaved ? "default" : "outline"} 
+              size="sm"
+              onClick={handleSaveToggle}
+              className="gap-2"
+            >
+              <Bookmark className={`w-4 h-4 ${isSaved ? 'fill-current' : ''}`} />
+              {isSaved ? 'Saved' : 'Save'}
+            </Button>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={() => alert('Feature not implemented yet.')}
+              className="gap-2"
+            >
+              <Share className="w-4 h-4" />
+              Share
+            </Button>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={() => setIsExportOpen(true)}
+              className="gap-2"
+            >
+              <Download className="w-4 h-4" />
+              Export
+            </Button>
           </div>
 
           {/* View Controls */}
