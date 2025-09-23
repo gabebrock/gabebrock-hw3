@@ -177,7 +177,7 @@ export default function DocumentViewer({ params }: DocumentViewerProps) {
                 <Bookmark className={`w-4 h-4 mr-2 ${isSaved ? 'fill-current' : ''}`} />
                 {isSaved ? 'Saved' : 'Save'}
               </Button>
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="sm" onClick={() => alert('Feature not implemented yet.')}>
                 <Share className="w-4 h-4 mr-2" />
                 Share
               </Button>
