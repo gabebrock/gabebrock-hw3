@@ -9,12 +9,10 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { 
   Search, 
-  Filter, 
   Calendar, 
   MapPin, 
   FileText, 
-  Eye,
-  TrendingUp
+  Eye
 } from "lucide-react";
 import { mockCounties, mockDocuments, Document } from "@/lib/mock-data";
 import { Navigation } from "@/components/navigation";
@@ -26,7 +24,6 @@ export default function SearchPage() {
   const [selectedTopics, setSelectedTopics] = useState<string[]>([]);
   const [selectedDocTypes, setSelectedDocTypes] = useState<string[]>([]);
   const [dateRange, setDateRange] = useState({ start: "", end: "" });
-  const [showFilters, setShowFilters] = useState(false);
 
   // Mock search results - in a real app this would be filtered based on the search criteria
   const [searchResults, setSearchResults] = useState<Document[]>(mockDocuments);
@@ -124,11 +121,6 @@ export default function SearchPage() {
     performSearch();
   }, [searchQuery, selectedCounties, selectedTopics, selectedDocTypes, dateRange]);
 
-  const handleSearch = () => {
-    // This function is now mainly for the manual search button
-    // Real-time search is handled by useEffect above
-  };
-
   const handleCountyChange = (countyId: string, checked: boolean) => {
     if (checked) {
       setSelectedCounties([...selectedCounties, countyId]);
@@ -170,32 +162,22 @@ export default function SearchPage() {
           </div>
           
           {/* Main Search Bar */}
-          <div className="flex gap-4 mb-4">
-            <div className="flex-1 relative">
+          <div className="mb-4">
+            <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
               <Input
                 placeholder="Search for keywords, topics, or specific issues..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-10"
-                onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
               />
             </div>
-            <Button onClick={handleSearch}>Search</Button>
-            <Button 
-              variant="outline" 
-              onClick={() => setShowFilters(!showFilters)}
-              className="gap-2"
-            >
-              <Filter className="w-4 h-4" />
-              Filters
-            </Button>
           </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Filters Sidebar */}
-          <div className={`lg:col-span-1 ${showFilters ? 'block' : 'hidden lg:block'}`}>
+          <div className="lg:col-span-1">
             <Card>
               <CardHeader>
                 <CardTitle className="text-lg">Filters</CardTitle>

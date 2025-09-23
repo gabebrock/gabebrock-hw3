@@ -13,7 +13,6 @@ import {
   Bell,
   MapPin,
   Calendar,
-  TrendingUp,
   Edit,
   Save,
   X,

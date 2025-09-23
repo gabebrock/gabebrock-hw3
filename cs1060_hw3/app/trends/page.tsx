@@ -13,12 +13,10 @@ import {
   Map,
   ArrowUp,
   ArrowDown,
-  Minus,
-  TrendingUp
+  Minus
 } from "lucide-react";
 import { mockCounties, mockTrends, mockDocuments } from "@/lib/mock-data";
 import { Navigation } from "@/components/navigation";
-import Link from "next/link";
 
 export default function TrendsPage() {
   const [selectedTrend, setSelectedTrend] = useState(mockTrends[0]);

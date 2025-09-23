@@ -4,18 +4,16 @@ import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { 
-  ArrowLeft,
-  Download, 
-  Share, 
+import {
   Bookmark,
+  Share,
+  Download,
   Eye,
   FileText,
   MapPin,
   Calendar,
   Search,
-  Highlighter,
-  TrendingUp
+  Highlighter
 } from "lucide-react";
 import { mockCounties, mockDocuments } from "@/lib/mock-data";
 import { ExportDialog } from "@/components/export-dialog";
