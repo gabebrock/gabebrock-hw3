@@ -21,7 +21,7 @@ import { Navigation } from "@/components/navigation";
 export default function TrendsPage() {
   const [selectedTrend, setSelectedTrend] = useState(mockTrends[0]);
   const [viewMode, setViewMode] = useState<'heatmap' | 'timeline' | 'comparison'>('heatmap');
-  const [timeframe, setTimeframe] = useState('30d');
+
 
   // Mock intensity data for heatmap visualization
   const getIntensityColor = (intensity: number) => {
@@ -91,20 +91,6 @@ export default function TrendsPage() {
                 <BarChart3 className="w-4 h-4 mr-2" />
                 Compare
               </Button>
-            </div>
-            
-            <div className="flex items-center gap-2">
-              <Label className="text-sm">Timeframe:</Label>
-              <select 
-                value={timeframe} 
-                onChange={(e) => setTimeframe(e.target.value)}
-                className="px-3 py-1 border rounded-md text-sm"
-              >
-                <option value="7d">Last 7 days</option>
-                <option value="30d">Last 30 days</option>
-                <option value="90d">Last 90 days</option>
-                <option value="1y">Last year</option>
-              </select>
             </div>
           </div>
         </div>
