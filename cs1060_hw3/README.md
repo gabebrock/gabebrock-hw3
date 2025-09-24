@@ -1,34 +1,35 @@
-<h1 align="center">Next.js and Supabase Starter Kit</h1>
+<h1 align="center">CivicPulse - Municipal Data Monitoring Platform</h1>
 
 <p align="center">
- The fastest way to build apps with Next.js and Supabase
+  **Name:** Gabe Brock  
+  **GitHub Username:** gabebrock  
+  **Deployment URL:** https://gabebrock-hw3.vercel.app/  
+  **PRD URL:** [To be added - link to your team's PRD]
 </p>
 
-<p align="center">
-  <a href="#features"><strong>Features</strong></a> ·
-  <a href="#demo"><strong>Demo</strong></a> ·
-  <a href="#deploy-to-vercel"><strong>Deploy to Vercel</strong></a> ·
-  <a href="#clone-and-run-locally"><strong>Clone and run locally</strong></a> ·
-  <a href="#feedback-and-issues"><strong>Feedback and issues</strong></a>
-  <a href="#more-supabase-examples"><strong>More Examples</strong></a>
-</p>
-<br/>
+## Overview
 
-## Features
+CivicPulse is a comprehensive municipal data monitoring platform that helps users "Find local trends before they break nationally." The platform tracks municipal meetings, agendas, and policy discussions across Kansas counties, providing early insights into emerging policy trends.
 
-- Works across the entire [Next.js](https://nextjs.org) stack
-  - App Router
-  - Pages Router
-  - Middleware
-  - Client
-  - Server
-  - It just works!
-- supabase-ssr. A package to configure Supabase Auth to use cookies
-- Password-based authentication block installed via the [Supabase UI Library](https://supabase.com/ui/docs/nextjs/password-based-auth)
-- Styling with [Tailwind CSS](https://tailwindcss.com)
-- Components with [shadcn/ui](https://ui.shadcn.com/)
-- Optional deployment with [Supabase Vercel Integration and Vercel deploy](#deploy-your-own)
-  - Environment variables automatically assigned to Vercel project
+## Key Features Implemented
+
+### Complete User Journeys
+- **Reporter Journey**: Search education policies, analyze cell phone ban discussions
+- **Policy Strategist Journey**: Track renewable energy trends across counties  
+- **Community Advocate Journey**: Monitor transit and housing development policies
+
+### Core Platform Features
+- **Dashboard**: Watchlist feed, alerts, upcoming meetings, quick search
+- **Advanced Search**: Real-time filtering by keywords, counties, topics, date ranges
+- **Document Viewer**: Split view with PDF placeholder and extracted text, keyword highlighting
+- **Trend Analysis**: Interactive heatmap, timeline view, comparative analysis
+- **Responsive Design**: Works across desktop, tablet, and mobile devices
+
+### Technical Implementation
+- **Frontend**: Next.js 15 with App Router, TypeScript
+- **Styling**: Tailwind CSS + shadcn/ui components
+- **Data**: Mock Kansas county municipal data (10 counties, 50+ documents)
+- **Deployment**: Vercel with automatic builds
 
 ## Clone and run locally
 
